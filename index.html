@@ -17,7 +17,6 @@
       background: #f4f4f4;
     }
 
-    /* Cabeçalho */
     header{
       width: 100%;
       background: #fff;
@@ -32,7 +31,6 @@
       letter-spacing: 1px;
     }
 
-    /* Área principal */
     .container{
       display: flex;
       justify-content: center;
@@ -41,7 +39,6 @@
       padding: 20px;
     }
 
-    /* Card */
     .card{
       width: 320px;
       background: white;
@@ -68,9 +65,9 @@
       margin-bottom: 20px;
     }
 
-    /* Botão */
     .btn{
-      display: inline-block;
+      display: block;
+      width: 100%;
       padding: 12px 20px;
       background: #007bff;
       color: white;
@@ -78,22 +75,29 @@
       border-radius: 10px;
       transition: 0.3s;
       font-weight: bold;
+      margin-bottom: 10px;
     }
 
     .btn:hover{
       background: #0056b3;
       transform: scale(1.05);
     }
+
+    .btn-secondary{
+      background: #28a745;
+    }
+
+    .btn-secondary:hover{
+      background: #1e7e34;
+    }
   </style>
 </head>
 <body>
 
-  <!-- Cabeçalho -->
   <header>
     <h1>Lopixe</h1>
   </header>
 
-  <!-- Conteúdo -->
   <div class="container">
     <div class="card">
 
@@ -107,6 +111,10 @@
 
       <a href="https://cria-catalogo.vercel.app/login" target="_blank" class="btn">
         Fazer login
+      </a>
+
+      <a href="https://google.com" target="_blank" class="btn btn-secondary">
+        Visitar Site
       </a>
 
     </div>
