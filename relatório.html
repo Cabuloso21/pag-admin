@@ -1,97 +1,321 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Adicionar Imagem com Link</title>
+
+<title>Compartilhar Banner</title>
 
 <style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
 body{
-    font-family: Arial, sans-serif;
+    background:#f4f4f4;
+    padding:30px;
+}
+
+.container{
+
+    max-width:500px;
+
+    margin:auto;
+
+    background:#fff;
+
     padding:20px;
+
+    border-radius:15px;
+
+    box-shadow:0 8px 20px rgba(0,0,0,.15);
+
+}
+
+h2{
+
+    text-align:center;
+
+    margin-bottom:20px;
+
 }
 
 input{
-    display:block;
-    margin:10px 0;
-    padding:8px;
-    width:300px;
+
+    width:100%;
+
+    padding:12px;
+
+    margin-top:12px;
+
+    border:1px solid #ccc;
+
+    border-radius:8px;
+
+    outline:none;
+
 }
 
 button{
-    padding:10px 20px;
+
+    width:100%;
+
+    margin-top:15px;
+
+    padding:13px;
+
+    border:none;
+
+    border-radius:8px;
+
+    font-size:16px;
+
     cursor:pointer;
+
+    transition:.3s;
+
+}
+
+#adicionar{
+
+    background:#0d6efd;
+
+    color:#fff;
+
+}
+
+#adicionar:hover{
+
+    background:#0b5ed7;
+
+}
+
+#compartilhar{
+
+    background:#198754;
+
+    color:#fff;
+
+}
+
+#compartilhar:hover{
+
+    background:#157347;
+
+}
+
+#preview{
+
+    display:none;
+
+    width:100%;
+
+    margin-top:20px;
+
+    border-radius:10px;
+
 }
 
 #resultado{
-    margin-top:20px;
-}
 
-#resultado a{
-    display:inline-block;
+    margin-top:20px;
+
 }
 
 #resultado img{
-    max-width:300px;
+
+    width:100%;
+
     border-radius:10px;
+
     cursor:pointer;
-    transition:0.3s;
+
+    transition:.3s;
+
 }
 
 #resultado img:hover{
-    transform:scale(1.03);
+
+    transform:scale(1.02);
+
 }
+
 </style>
+
 </head>
+
 <body>
 
-<h2>Adicionar imagem com link</h2>
+<div class="container">
 
-<input type="file" id="imagem" accept="image/*">
+<h2>Adicionar Banner</h2>
+
+<input
+type="file"
+id="imagem"
+accept="image/*">
 
 <input
 type="url"
 id="link"
-placeholder="https://exemplo.com">
+placeholder="https://www.lopixe.com.br">
 
-<button onclick="adicionarImagem()">
-Adicionar
+<img id="preview">
+
+<button
+id="adicionar"
+onclick="adicionarImagem()">
+
+Adicionar Banner
+
+</button>
+
+<button
+id="compartilhar"
+onclick="compartilhar()">
+
+📤 Compartilhar
+
 </button>
 
 <div id="resultado"></div>
 
+</div>
+
 <script>
+
+const inputImagem=document.getElementById("imagem");
+
+const preview=document.getElementById("preview");
+
+let arquivoSelecionado=null;
+
+let imagemBase64="";
+
+inputImagem.addEventListener("change",function(){
+
+    arquivoSelecionado=this.files[0];
+
+    if(!arquivoSelecionado) return;
+
+    const leitor=new FileReader();
+
+    leitor.onload=function(e){
+
+        imagemBase64=e.target.result;
+
+        preview.src=imagemBase64;
+
+        preview.style.display="block";
+
+    }
+
+    leitor.readAsDataURL(arquivoSelecionado);
+
+});
+
 function adicionarImagem(){
 
-    const arquivo = document.getElementById("imagem").files[0];
-    const link = document.getElementById("link").value.trim();
+    const link=document.getElementById("link").value.trim();
 
-    if(!arquivo){
+    if(!arquivoSelecionado){
+
         alert("Selecione uma imagem.");
+
         return;
+
     }
 
-    if(!link){
+    if(link==""){
+
         alert("Digite um link.");
+
         return;
+
     }
 
-    const leitor = new FileReader();
+    document.getElementById("resultado").innerHTML=`
 
-    leitor.onload = function(e){
-
-        const html = `
         <a href="${link}" target="_blank">
-            <img src="${e.target.result}">
+
+            <img src="${imagemBase64}" alt="Banner">
+
         </a>
-        `;
 
-        document.getElementById("resultado").innerHTML = html;
-    };
+    `;
 
-    leitor.readAsDataURL(arquivo);
 }
+
+async function compartilhar(){
+
+    const link=document.getElementById("link").value.trim();
+
+    if(!arquivoSelecionado){
+
+        alert("Selecione uma imagem.");
+
+        return;
+
+    }
+
+    if(link==""){
+
+        alert("Digite um link.");
+
+        return;
+
+    }
+
+    try{
+
+        if(
+            navigator.canShare &&
+            navigator.canShare({
+                files:[arquivoSelecionado]
+            })
+        ){
+
+            await navigator.share({
+
+                title:"Confira este produto",
+
+                text:"🛒 Confira este produto na Lopixe.",
+
+                url:link,
+
+                files:[arquivoSelecionado]
+
+            });
+
+        }else{
+
+            await navigator.share({
+
+                title:"Confira este produto",
+
+                text:"🛒 Confira este produto na Lopixe.",
+
+                url:link
+
+            });
+
+        }
+
+    }catch(erro){
+
+        console.log(erro);
+
+    }
+
+}
+
 </script>
 
 </body>
+
 </html>
