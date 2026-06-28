@@ -17,13 +17,14 @@
 }
 
 body{
-    background:#f5f5f5;
+    background:#f4f4f4;
     padding:30px;
 }
 
 .container{
 
     max-width:500px;
+
     margin:auto;
 
     background:#fff;
@@ -32,7 +33,7 @@ body{
 
     border-radius:15px;
 
-    box-shadow:0 10px 25px rgba(0,0,0,.12);
+    box-shadow:0 8px 20px rgba(0,0,0,.15);
 
 }
 
@@ -72,11 +73,9 @@ button{
 
     border-radius:8px;
 
-    cursor:pointer;
-
     font-size:16px;
 
-    color:#fff;
+    cursor:pointer;
 
     transition:.3s;
 
@@ -85,6 +84,8 @@ button{
 #adicionar{
 
     background:#0d6efd;
+
+    color:#fff;
 
 }
 
@@ -97,6 +98,8 @@ button{
 #compartilhar{
 
     background:#198754;
+
+    color:#fff;
 
 }
 
@@ -160,17 +163,21 @@ accept="image/*">
 <input
 type="url"
 id="link"
-placeholder="https://www.seusite.com.br">
+placeholder="https://www.lopixe.com.br">
 
 <img id="preview">
 
-<button id="adicionar" onclick="adicionarImagem()">
+<button
+id="adicionar"
+onclick="adicionarImagem()">
 
 Adicionar Banner
 
 </button>
 
-<button id="compartilhar" onclick="compartilhar()">
+<button
+id="compartilhar"
+onclick="compartilhar()">
 
 📤 Compartilhar
 
@@ -236,7 +243,7 @@ function adicionarImagem(){
 
         <a href="${link}" target="_blank">
 
-            <img src="${imagemBase64}">
+            <img src="${imagemBase64}" alt="Banner">
 
         </a>
 
@@ -267,22 +274,17 @@ async function compartilhar(){
     try{
 
         if(
-
             navigator.canShare &&
-
             navigator.canShare({
-
                 files:[arquivoSelecionado]
-
             })
-
         ){
 
             await navigator.share({
 
-                title:"Confira este banner",
+                title:"Confira este produto",
 
-                text:"Veja este link:\n"+link,
+                text:"🛒 Confira este produto na Lopixe.",
 
                 url:link,
 
@@ -290,15 +292,13 @@ async function compartilhar(){
 
             });
 
-        }
-
-        else{
+        }else{
 
             await navigator.share({
 
-                title:"Confira este banner",
+                title:"Confira este produto",
 
-                text:"Veja este link:\n"+link,
+                text:"🛒 Confira este produto na Lopixe.",
 
                 url:link
 
@@ -306,11 +306,9 @@ async function compartilhar(){
 
         }
 
-    }
+    }catch(erro){
 
-    catch(e){
-
-        console.log(e);
+        console.log(erro);
 
     }
 
