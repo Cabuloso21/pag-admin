@@ -1,97 +1,207 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Adicionar Imagem com Link</title>
+
+<title>Imagem com Link</title>
 
 <style>
+
 body{
-    font-family: Arial, sans-serif;
+    font-family:Arial, sans-serif;
+    background:#f5f5f5;
+    padding:30px;
+}
+
+.container{
+    max-width:500px;
+    margin:auto;
+    background:#fff;
     padding:20px;
+    border-radius:15px;
+    box-shadow:0 5px 15px rgba(0,0,0,.15);
+}
+
+h2{
+    text-align:center;
 }
 
 input{
-    display:block;
-    margin:10px 0;
-    padding:8px;
-    width:300px;
+    width:100%;
+    padding:12px;
+    margin-top:12px;
+    box-sizing:border-box;
 }
 
 button{
-    padding:10px 20px;
+    width:100%;
+    padding:12px;
+    margin-top:12px;
     cursor:pointer;
+    border:none;
+    border-radius:8px;
+    background:#007bff;
+    color:#fff;
+    font-size:16px;
+}
+
+button:hover{
+    background:#005ecb;
+}
+
+#preview{
+    display:none;
+    width:100%;
+    margin-top:20px;
+    border-radius:10px;
 }
 
 #resultado{
     margin-top:20px;
-}
-
-#resultado a{
-    display:inline-block;
+    text-align:center;
 }
 
 #resultado img{
-    max-width:300px;
+    width:100%;
     border-radius:10px;
     cursor:pointer;
-    transition:0.3s;
+    transition:.3s;
 }
 
 #resultado img:hover{
-    transform:scale(1.03);
+    transform:scale(1.02);
 }
+
 </style>
+
 </head>
+
 <body>
 
-<h2>Adicionar imagem com link</h2>
+<div class="container">
 
-<input type="file" id="imagem" accept="image/*">
+<h2>Adicionar Banner</h2>
+
+<input
+type="file"
+id="imagem"
+accept="image/*">
 
 <input
 type="url"
 id="link"
 placeholder="https://exemplo.com">
 
+<img id="preview">
+
 <button onclick="adicionarImagem()">
-Adicionar
+Adicionar Banner
+</button>
+
+<button onclick="copiarCodigo()">
+Copiar Código HTML
 </button>
 
 <div id="resultado"></div>
 
+</div>
+
 <script>
-function adicionarImagem(){
 
-    const arquivo = document.getElementById("imagem").files[0];
-    const link = document.getElementById("link").value.trim();
+const inputImagem=document.getElementById("imagem");
+const preview=document.getElementById("preview");
 
-    if(!arquivo){
-        alert("Selecione uma imagem.");
-        return;
+let imagemBase64="";
+
+inputImagem.addEventListener("change",function(){
+
+    const arquivo=this.files[0];
+
+    if(!arquivo) return;
+
+    const leitor=new FileReader();
+
+    leitor.onload=function(e){
+
+        imagemBase64=e.target.result;
+
+        preview.src=imagemBase64;
+
+        preview.style.display="block";
+
     }
-
-    if(!link){
-        alert("Digite um link.");
-        return;
-    }
-
-    const leitor = new FileReader();
-
-    leitor.onload = function(e){
-
-        const html = `
-        <a href="${link}" target="_blank">
-            <img src="${e.target.result}">
-        </a>
-        `;
-
-        document.getElementById("resultado").innerHTML = html;
-    };
 
     leitor.readAsDataURL(arquivo);
+
+});
+
+function adicionarImagem(){
+
+    const link=document.getElementById("link").value.trim();
+
+    if(imagemBase64==""){
+
+        alert("Selecione uma imagem.");
+
+        return;
+
+    }
+
+    if(link==""){
+
+        alert("Digite um link.");
+
+        return;
+
+    }
+
+    document.getElementById("resultado").innerHTML=`
+
+        <a href="${link}" target="_blank">
+
+            <img src="${imagemBase64}">
+
+        </a>
+
+    `;
+
 }
+
+async function copiarCodigo(){
+
+    const link=document.getElementById("link").value.trim();
+
+    if(imagemBase64==""){
+
+        alert("Selecione uma imagem.");
+
+        return;
+
+    }
+
+    if(link==""){
+
+        alert("Digite um link.");
+
+        return;
+
+    }
+
+    const codigo=`
+<a href="${link}" target="_blank">
+    <img src="${imagemBase64}" alt="">
+</a>`;
+
+    await navigator.clipboard.writeText(codigo);
+
+    alert("Código HTML copiado com sucesso!");
+
+}
+
 </script>
 
 </body>
+
 </html>
