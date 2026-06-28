@@ -5,73 +5,141 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Imagem com Link</title>
+<title>Compartilhar Banner</title>
 
 <style>
 
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
 body{
-    font-family:Arial, sans-serif;
     background:#f5f5f5;
     padding:30px;
 }
 
 .container{
+
     max-width:500px;
     margin:auto;
+
     background:#fff;
+
     padding:20px;
+
     border-radius:15px;
-    box-shadow:0 5px 15px rgba(0,0,0,.15);
+
+    box-shadow:0 10px 25px rgba(0,0,0,.12);
+
 }
 
 h2{
+
     text-align:center;
+
+    margin-bottom:20px;
+
 }
 
 input{
+
     width:100%;
+
     padding:12px;
+
     margin-top:12px;
-    box-sizing:border-box;
+
+    border:1px solid #ccc;
+
+    border-radius:8px;
+
+    outline:none;
+
 }
 
 button{
+
     width:100%;
-    padding:12px;
-    margin-top:12px;
-    cursor:pointer;
+
+    margin-top:15px;
+
+    padding:13px;
+
     border:none;
+
     border-radius:8px;
-    background:#007bff;
-    color:#fff;
+
+    cursor:pointer;
+
     font-size:16px;
+
+    color:#fff;
+
+    transition:.3s;
+
 }
 
-button:hover{
-    background:#005ecb;
+#adicionar{
+
+    background:#0d6efd;
+
+}
+
+#adicionar:hover{
+
+    background:#0b5ed7;
+
+}
+
+#compartilhar{
+
+    background:#198754;
+
+}
+
+#compartilhar:hover{
+
+    background:#157347;
+
 }
 
 #preview{
+
     display:none;
+
     width:100%;
+
     margin-top:20px;
+
     border-radius:10px;
+
 }
 
 #resultado{
+
     margin-top:20px;
-    text-align:center;
+
 }
 
 #resultado img{
+
     width:100%;
+
     border-radius:10px;
+
     cursor:pointer;
+
     transition:.3s;
+
 }
 
 #resultado img:hover{
+
     transform:scale(1.02);
+
 }
 
 </style>
@@ -92,16 +160,20 @@ accept="image/*">
 <input
 type="url"
 id="link"
-placeholder="https://exemplo.com">
+placeholder="https://www.seusite.com.br">
 
 <img id="preview">
 
-<button onclick="adicionarImagem()">
+<button id="adicionar" onclick="adicionarImagem()">
+
 Adicionar Banner
+
 </button>
 
-<button onclick="copiarCodigo()">
-Copiar Código HTML
+<button id="compartilhar" onclick="compartilhar()">
+
+📤 Compartilhar
+
 </button>
 
 <div id="resultado"></div>
@@ -111,15 +183,18 @@ Copiar Código HTML
 <script>
 
 const inputImagem=document.getElementById("imagem");
+
 const preview=document.getElementById("preview");
+
+let arquivoSelecionado=null;
 
 let imagemBase64="";
 
 inputImagem.addEventListener("change",function(){
 
-    const arquivo=this.files[0];
+    arquivoSelecionado=this.files[0];
 
-    if(!arquivo) return;
+    if(!arquivoSelecionado) return;
 
     const leitor=new FileReader();
 
@@ -133,7 +208,7 @@ inputImagem.addEventListener("change",function(){
 
     }
 
-    leitor.readAsDataURL(arquivo);
+    leitor.readAsDataURL(arquivoSelecionado);
 
 });
 
@@ -141,7 +216,7 @@ function adicionarImagem(){
 
     const link=document.getElementById("link").value.trim();
 
-    if(imagemBase64==""){
+    if(!arquivoSelecionado){
 
         alert("Selecione uma imagem.");
 
@@ -169,11 +244,11 @@ function adicionarImagem(){
 
 }
 
-async function copiarCodigo(){
+async function compartilhar(){
 
     const link=document.getElementById("link").value.trim();
 
-    if(imagemBase64==""){
+    if(!arquivoSelecionado){
 
         alert("Selecione uma imagem.");
 
@@ -189,14 +264,55 @@ async function copiarCodigo(){
 
     }
 
-    const codigo=`
-<a href="${link}" target="_blank">
-    <img src="${imagemBase64}" alt="">
-</a>`;
+    try{
 
-    await navigator.clipboard.writeText(codigo);
+        if(
 
-    alert("Código HTML copiado com sucesso!");
+            navigator.canShare &&
+
+            navigator.canShare({
+
+                files:[arquivoSelecionado]
+
+            })
+
+        ){
+
+            await navigator.share({
+
+                title:"Confira este banner",
+
+                text:"Veja este link:\n"+link,
+
+                url:link,
+
+                files:[arquivoSelecionado]
+
+            });
+
+        }
+
+        else{
+
+            await navigator.share({
+
+                title:"Confira este banner",
+
+                text:"Veja este link:\n"+link,
+
+                url:link
+
+            });
+
+        }
+
+    }
+
+    catch(e){
+
+        console.log(e);
+
+    }
 
 }
 
