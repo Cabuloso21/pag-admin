@@ -1,321 +1,130 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Compartilhar Banner</title>
-
-<style>
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial,sans-serif;
-}
-
-body{
-    background:#f4f4f4;
-    padding:30px;
-}
-
-.container{
-
-    max-width:500px;
-
-    margin:auto;
-
-    background:#fff;
-
-    padding:20px;
-
-    border-radius:15px;
-
-    box-shadow:0 8px 20px rgba(0,0,0,.15);
-
-}
-
-h2{
-
-    text-align:center;
-
-    margin-bottom:20px;
-
-}
-
-input{
-
-    width:100%;
-
-    padding:12px;
-
-    margin-top:12px;
-
-    border:1px solid #ccc;
-
-    border-radius:8px;
-
-    outline:none;
-
-}
-
-button{
-
-    width:100%;
-
-    margin-top:15px;
-
-    padding:13px;
-
-    border:none;
-
-    border-radius:8px;
-
-    font-size:16px;
-
-    cursor:pointer;
-
-    transition:.3s;
-
-}
-
-#adicionar{
-
-    background:#0d6efd;
-
-    color:#fff;
-
-}
-
-#adicionar:hover{
-
-    background:#0b5ed7;
-
-}
-
-#compartilhar{
-
-    background:#198754;
-
-    color:#fff;
-
-}
-
-#compartilhar:hover{
-
-    background:#157347;
-
-}
-
-#preview{
-
-    display:none;
-
-    width:100%;
-
-    margin-top:20px;
-
-    border-radius:10px;
-
-}
-
-#resultado{
-
-    margin-top:20px;
-
-}
-
-#resultado img{
-
-    width:100%;
-
-    border-radius:10px;
-
-    cursor:pointer;
-
-    transition:.3s;
-
-}
-
-#resultado img:hover{
-
-    transform:scale(1.02);
-
-}
-
-</style>
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Lopixe</title>
+
+  <style>
+    *{
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body{
+      background: #f4f4f4;
+    }
+
+    header{
+      width: 100%;
+      background: #fff;
+      padding: 18px;
+      text-align: center;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+    }
+
+    header h1{
+      color: #820AD1;
+      font-size: 28px;
+      letter-spacing: 1px;
+    }
+
+    .container{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: calc(100vh - 80px);
+      padding: 20px;
+    }
+
+    .card{
+      width: 320px;
+      background: white;
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+      text-align: center;
+    }
+
+    .card img{
+      width: 100%;
+      border-radius: 12px;
+      margin-bottom: 15px;
+    }
+
+    .card h2{
+      color: #222;
+      margin-bottom: 10px;
+    }
+
+    .card p{
+      color: #666;
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+
+    .btn{
+      display: block;
+      width: 100%;
+      padding: 12px 20px;
+      background: #007bff;
+      color: white;
+      text-decoration: none;
+      border-radius: 10px;
+      transition: 0.3s;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .btn:hover{
+      background: #0056b3;
+      transform: scale(1.05);
+    }
+
+    .btn-secondary{
+      background: #28a745;
+    }
+
+    .btn-secondary:hover{
+      background: #1e7e34;
+    }
+  </style>
 </head>
-
 <body>
 
-<div class="container">
-
-<h2>Adicionar Banner</h2>
-
-<input
-type="file"
-id="imagem"
-accept="image/*">
-
-<input
-type="url"
-id="link"
-placeholder="https://www.lopixe.com.br">
-
-<img id="preview">
-
-<button
-id="adicionar"
-onclick="adicionarImagem()">
-
-Adicionar Banner
-
-</button>
-
-<button
-id="compartilhar"
-onclick="compartilhar()">
-
-📤 Compartilhar
-
-</button>
-
-<div id="resultado"></div>
-
-</div>
-
-<script>
-
-const inputImagem=document.getElementById("imagem");
-
-const preview=document.getElementById("preview");
-
-let arquivoSelecionado=null;
-
-let imagemBase64="";
-
-inputImagem.addEventListener("change",function(){
-
-    arquivoSelecionado=this.files[0];
-
-    if(!arquivoSelecionado) return;
-
-    const leitor=new FileReader();
-
-    leitor.onload=function(e){
-
-        imagemBase64=e.target.result;
-
-        preview.src=imagemBase64;
-
-        preview.style.display="block";
-
-    }
-
-    leitor.readAsDataURL(arquivoSelecionado);
-
-});
-
-function adicionarImagem(){
-
-    const link=document.getElementById("link").value.trim();
-
-    if(!arquivoSelecionado){
-
-        alert("Selecione uma imagem.");
-
-        return;
-
-    }
-
-    if(link==""){
-
-        alert("Digite um link.");
-
-        return;
-
-    }
-
-    document.getElementById("resultado").innerHTML=`
-
-        <a href="${link}" target="_blank">
-
-            <img src="${imagemBase64}" alt="Banner">
-
-        </a>
-
-    `;
-
-}
-
-async function compartilhar(){
-
-    const link=document.getElementById("link").value.trim();
-
-    if(!arquivoSelecionado){
-
-        alert("Selecione uma imagem.");
-
-        return;
-
-    }
-
-    if(link==""){
-
-        alert("Digite um link.");
-
-        return;
-
-    }
-
-    try{
-
-        if(
-            navigator.canShare &&
-            navigator.canShare({
-                files:[arquivoSelecionado]
-            })
-        ){
-
-            await navigator.share({
-
-                title:"Confira este produto",
-
-                text:"🛒 Confira este produto na Lopixe.",
-
-                url:link,
-
-                files:[arquivoSelecionado]
-
-            });
-
-        }else{
-
-            await navigator.share({
-
-                title:"Confira este produto",
-
-                text:"🛒 Confira este produto na Lopixe.",
-
-                url:link
-
-            });
-
-        }
-
-    }catch(erro){
-
-        console.log(erro);
-
-    }
-
-}
-
-</script>
+  <header>
+    <h1>Lopixe</h1>
+  </header>
+
+  <div class="container">
+    <div class="card">
+
+      <img src="https://picsum.photos/400/200" alt="Imagem">
+
+      <h2>Acessar Conta</h2>
+
+      <p>
+        Esse é um exemplo de card em HTML e CSS com botão de redirecionamento.
+      </p>
+
+      <a href="https://loja-dropshipping-azure.vercel.app/login" class="btn">
+  Fazer login
+</a>
+
+<a href="https://loja-dropshipping-azure.vercel.app/cadastro" class="btn btn-secondary">
+  Cadastro
+</a>
+
+  <a href="https://loja-dropshipping-azure.vercel.app/cadastro" class="btn btn-secondary">
+  Criar post
+</a>      
+   
+      
+      </div>
+  </div>
 
 </body>
-
 </html>
