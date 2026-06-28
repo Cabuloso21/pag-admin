@@ -1,126 +1,97 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Lopixe</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Adicionar Imagem com Link</title>
 
-  <style>
-    *{
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Arial, sans-serif;
-    }
+<style>
+body{
+    font-family: Arial, sans-serif;
+    padding:20px;
+}
 
-    body{
-      background: #f4f4f4;
-    }
+input{
+    display:block;
+    margin:10px 0;
+    padding:8px;
+    width:300px;
+}
 
-    header{
-      width: 100%;
-      background: #fff;
-      padding: 18px;
-      text-align: center;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.15);
-    }
+button{
+    padding:10px 20px;
+    cursor:pointer;
+}
 
-    header h1{
-      color: #820AD1;
-      font-size: 28px;
-      letter-spacing: 1px;
-    }
+#resultado{
+    margin-top:20px;
+}
 
-    .container{
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: calc(100vh - 80px);
-      padding: 20px;
-    }
+#resultado a{
+    display:inline-block;
+}
 
-    .card{
-      width: 320px;
-      background: white;
-      border-radius: 18px;
-      padding: 20px;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.15);
-      text-align: center;
-    }
+#resultado img{
+    max-width:300px;
+    border-radius:10px;
+    cursor:pointer;
+    transition:0.3s;
+}
 
-    .card img{
-      width: 100%;
-      border-radius: 12px;
-      margin-bottom: 15px;
-    }
-
-    .card h2{
-      color: #222;
-      margin-bottom: 10px;
-    }
-
-    .card p{
-      color: #666;
-      font-size: 14px;
-      margin-bottom: 20px;
-    }
-
-    .btn{
-      display: block;
-      width: 100%;
-      padding: 12px 20px;
-      background: #007bff;
-      color: white;
-      text-decoration: none;
-      border-radius: 10px;
-      transition: 0.3s;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-
-    .btn:hover{
-      background: #0056b3;
-      transform: scale(1.05);
-    }
-
-    .btn-secondary{
-      background: #28a745;
-    }
-
-    .btn-secondary:hover{
-      background: #1e7e34;
-    }
-  </style>
+#resultado img:hover{
+    transform:scale(1.03);
+}
+</style>
 </head>
 <body>
 
-  <header>
-    <h1>Lopixe</h1>
-  </header>
+<h2>Adicionar imagem com link</h2>
 
-  <div class="container">
-    <div class="card">
+<input type="file" id="imagem" accept="image/*">
 
-      <img src="https://picsum.photos/400/200" alt="Imagem">
+<input
+type="url"
+id="link"
+placeholder="https://exemplo.com">
 
-      <h2>Acessar Conta</h2>
+<button onclick="adicionarImagem()">
+Adicionar
+</button>
 
-      <p>
-        Esse é um exemplo de card em HTML e CSS com botão de redirecionamento.
-      </p>
+<div id="resultado"></div>
 
-      <a href="https://loja-dropshipping-azure.vercel.app/login" class="btn">
-  Fazer login
-</a>
+<script>
+function adicionarImagem(){
 
-<a href="https://loja-dropshipping-azure.vercel.app/cadastro" class="btn btn-secondary">
-  Cadastro
-</a>
+    const arquivo = document.getElementById("imagem").files[0];
+    const link = document.getElementById("link").value.trim();
 
-   
-      
-      </div>
-  </div>
+    if(!arquivo){
+        alert("Selecione uma imagem.");
+        return;
+    }
+
+    if(!link){
+        alert("Digite um link.");
+        return;
+    }
+
+    const leitor = new FileReader();
+
+    leitor.onload = function(e){
+
+        const html = `
+        <a href="${link}" target="_blank">
+            <img src="${e.target.result}">
+        </a>
+        `;
+
+        document.getElementById("resultado").innerHTML = html;
+    };
+
+    leitor.readAsDataURL(arquivo);
+}
+</script>
 
 </body>
 </html>
